@@ -10,6 +10,6 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  await app.listen(3500, 'nest_api');
+  await app.listen(3500);
 }
 bootstrap();

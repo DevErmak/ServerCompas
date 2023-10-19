@@ -16,10 +16,14 @@ export class UserService {
     return await this.userRepository.save({ ...userInput });
   }
   async getOneUser(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({ id });
+    return await this.userRepository.findOne({ where: { id } });
   }
   async getAllUser(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+    const users = await this.userRepository.find();
+    console.log('!!!!---------------->users', users);
+    const result: UserEntity[] = JSON.parse(JSON.stringify(users));
+    console.log('!!!!---------------->result', result);
+    return users;
   }
   async removeUser(id: number): Promise<number> {
     await this.userRepository.delete({ id });

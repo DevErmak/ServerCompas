@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './user/users.module';
 // import config from './config';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/dist/esm/plugin/landingPage/default';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
@@ -32,17 +32,16 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/dist/e
         migrations: [__dirname + '/**/*.migration.{ts,js}'],
       }),
     }),
-    UsersModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
-      sortSchema: true,
-      playground: true,
-      // plugins:
-      //   process.env.MODE == 'production'
-      //     ? []
-      //     : [ApolloServerPluginLandingPageLocalDefault()],
+      useFactory: () => ({
+        autoSchemaFile: 'schema.gql',
+        sortSchema: true,
+        playground: false,
+        plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      }),
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
