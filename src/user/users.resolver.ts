@@ -32,6 +32,7 @@ export class UserResolver {
   async getOneUser(@Args('id') id: number): Promise<UserEntity> {
     return this.userService.getOneUser(id);
   }
+
   @Query(() => [UserEntity])
   async getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUser();

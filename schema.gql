@@ -2,6 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CountryEntity {
+  coatOfArms: String!
+  createdAt: DateTime!
+  currencies: String!
+  flags: String!
+  flagsAlt: String!
+  id: ID!
+  languages: String!
+  nameCapital: String!
+  nameCountry: String!
+  population: String!
+  region: String!
+  updateAt: DateTime!
+  user: UserEntity!
+  userId: ID!
+}
+
+input CreateCountryInput {
+  coatOfArms: String!
+  currencies: String!
+  flags: String!
+  flagsAlt: String!
+  languages: String!
+  nameCapital: String!
+  nameCountry: String!
+  population: String!
+  region: String!
+  userId: ID!
+}
+
 input CreateUserInput {
   login: String!
   password: String!
@@ -13,14 +43,33 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  createCountry(createCountry: CreateCountryInput!): CountryEntity!
   createUser(createUser: CreateUserInput!): UserEntity!
+  removeCountry(id: Float!): Float!
   removeUser(id: Float!): Float!
+  updateCountry(updateCountry: UpdateCountryInput!): CountryEntity!
   updateUser(updateUser: UpdateUserInput!): UserEntity!
 }
 
 type Query {
+  getAllCountry: [CountryEntity!]!
   getAllUsers: [UserEntity!]!
+  getOneCountry(id: Float!): CountryEntity!
   getOneUser(id: Float!): UserEntity!
+}
+
+input UpdateCountryInput {
+  coatOfArms: String
+  currencies: String
+  flags: String
+  flagsAlt: String
+  id: ID!
+  languages: String
+  nameCapital: String
+  nameCountry: String
+  population: String
+  region: String
+  userId: ID
 }
 
 input UpdateUserInput {
@@ -30,6 +79,7 @@ input UpdateUserInput {
 }
 
 type UserEntity {
+  countries: [CountryEntity!]
   createdAt: DateTime!
   id: ID!
   login: String!

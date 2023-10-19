@@ -19,7 +19,11 @@ export class UserEntity {
   @OneToMany(() => CountryEntity, (country) => country.user, {
     onDelete: 'CASCADE',
   })
+  @Field(() => [CountryEntity], { nullable: true })
   countries: CountryEntity[];
+
+  // @Field((type) => [CountryEntity])
+  // countries: CountryEntity[];
 
   @Field()
   @Column()
