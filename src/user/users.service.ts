@@ -19,11 +19,7 @@ export class UserService {
     return await this.userRepository.findOne({ where: { id } });
   }
   async getAllUser(): Promise<UserEntity[]> {
-    const users = await this.userRepository.find();
-    console.log('!!!!---------------->users', users);
-    const result: UserEntity[] = JSON.parse(JSON.stringify(users));
-    console.log('!!!!---------------->result', result);
-    return users;
+    return await this.userRepository.find();
   }
   async removeUser(id: number): Promise<number> {
     await this.userRepository.delete({ id });

@@ -1,18 +1,25 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { CountryEntity } from 'src/country/entities/country.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-@Entity({ name: 'users' })
+@Entity({ name: 'user' })
 export class UserEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => CountryEntity, (country) => country.user, {
+    onDelete: 'CASCADE',
+  })
+  countries: CountryEntity[];
 
   @Field()
   @Column()
@@ -21,10 +28,6 @@ export class UserEntity {
   @Field()
   @Column()
   password: string;
-
-  // @Field()
-  // @Column()
-  // favoriteCountries: [];
 
   @Field()
   @CreateDateColumn()
