@@ -4,12 +4,13 @@ import { UpdateCountryInput } from './dto/update-country.input';
 import { CountryEntity } from './entities/country.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserService } from 'src/user/users.service';
 
 @Injectable()
 export class CountryService {
   constructor(
     @InjectRepository(CountryEntity)
-    private readonly countryRepository: Repository<CountryEntity>,
+    private readonly countryRepository: Repository<CountryEntity>, // private userService: UserService,
   ) {}
 
   async createCountry(
@@ -28,6 +29,15 @@ export class CountryService {
   async getAllCountry(): Promise<CountryEntity[]> {
     return await this.countryRepository.find();
   }
+
+  async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {
+    return await this.countryRepository.find({
+      where: {
+        userId: userId,
+      },
+    });
+  }
+
   async updateCountry(
     updateCountryInput: UpdateCountryInput,
   ): Promise<CountryEntity> {

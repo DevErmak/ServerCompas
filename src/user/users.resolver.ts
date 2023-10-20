@@ -1,12 +1,25 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Parent,
+  ResolveField,
+} from '@nestjs/graphql';
 import { UserService } from './users.service';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { CountryEntity } from 'src/country/entities/country.entity';
+import { CountryService } from 'src/country/country.service';
 
 @Resolver('User')
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) // private countryService: CountryService,
+  {}
 
   // constructor(private readonly usersService: UsersService) {}
   @Mutation(() => UserEntity)
@@ -36,5 +49,12 @@ export class UserResolver {
   @Query(() => [UserEntity])
   async getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUser();
+  }
+
+  @ResolveField((returns) => CountryEntity)
+  async getAllCountriesUser(
+    @Parent() userEntity: UserEntity,
+  ): Promise<CountryEntity[]> {
+    return this.userService.getAllCountriesUser(userEntity.id);
   }
 }

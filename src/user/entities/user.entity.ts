@@ -22,9 +22,6 @@ export class UserEntity {
   @Field(() => [CountryEntity], { nullable: true })
   countries: CountryEntity[];
 
-  // @Field((type) => [CountryEntity])
-  // countries: CountryEntity[];
-
   @Field()
   @Column()
   login: string;

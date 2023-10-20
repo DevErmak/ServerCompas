@@ -8,6 +8,7 @@ type CountryEntity {
   currencies: String!
   flags: String!
   flagsAlt: String!
+  getAllCountriesUser: UserEntity!
   id: ID!
   languages: String!
   nameCapital: String!
