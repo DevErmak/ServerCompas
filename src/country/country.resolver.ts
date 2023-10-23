@@ -18,38 +18,32 @@ export class CountryResolver {
   constructor(private readonly countryService: CountryService) {}
 
   // constructor(private readonly usersService: UsersService) {}
-  @Mutation(() => CountryEntity)
-  async createCountry(
-    @Args('createCountry') createCountryInput: CreateCountryInput,
-  ): Promise<CountryEntity> {
-    return await this.countryService.createCountry(createCountryInput);
-  }
+  // @Mutation(() => CountryEntity)
+  // async createCountry(
+  //   @Args('createCountry') createCountryInput: CreateCountryInput,
+  // ): Promise<CountryEntity> {
+  //   return await this.countryService.createCountry(createCountryInput);
+  // }
 
-  @Mutation(() => CountryEntity)
-  async updateCountry(
-    @Args('updateCountry') updateCountryInput: UpdateCountryInput,
-  ): Promise<CountryEntity> {
-    return await this.countryService.updateCountry(updateCountryInput);
-  }
+  // @Mutation(() => CountryEntity)
+  // async updateCountry(
+  //   @Args('updateCountry') updateCountryInput: UpdateCountryInput,
+  // ): Promise<CountryEntity> {
+  //   return await this.countryService.updateCountry(updateCountryInput);
+  // }
 
-  @Mutation(() => Number)
-  async removeCountry(@Args('id') id: number): Promise<number> {
-    return await this.countryService.removeCountry(id);
-  }
+  // @Mutation(() => Number)
+  // async removeCountry(@Args('id') id: number): Promise<number> {
+  //   return await this.countryService.removeCountry(id);
+  // }
 
-  @Query(() => CountryEntity)
-  async getOneCountry(@Args('id') id: number): Promise<CountryEntity> {
-    return this.countryService.getOneCountry(id);
-  }
+  // @Query(() => CountryEntity)
+  // async getOneCountry(@Args('id') id: number): Promise<CountryEntity> {
+  //   return this.countryService.getOneCountry(id);
+  // }
 
-  @Query(() => [CountryEntity])
-  async getAllCountry(): Promise<CountryEntity[]> {
-    return this.countryService.getAllCountry();
-  }
-  // @ResolveField((returns) => UserEntity)
-  // async getAllCountriesUser(
-  //   @Parent() countryEntity: CountryEntity,
-  // ): Promise<CountryEntity[]> {
-  //   return this.countryService.getAllCountriesUser(countryEntity.userId);
+  // @Query(() => [CountryEntity])
+  // async getAllCountry(): Promise<CountryEntity[]> {
+  //   return this.countryService.getAllCountry();
   // }
 }

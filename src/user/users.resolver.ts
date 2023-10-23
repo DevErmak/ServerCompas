@@ -13,13 +13,14 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CountryEntity } from 'src/country/entities/country.entity';
 import { CountryService } from 'src/country/country.service';
+import { CreateCountryInput } from 'src/country/dto/create-country.input';
 
-@Resolver('User')
+@Resolver(() => UserEntity)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
-  ) // private countryService: CountryService,
-  {}
+    private countryService: CountryService,
+  ) {}
 
   // constructor(private readonly usersService: UsersService) {}
   @Mutation(() => UserEntity)
@@ -51,10 +52,30 @@ export class UserResolver {
     return this.userService.getAllUser();
   }
 
-  @ResolveField((returns) => CountryEntity)
-  async getAllCountriesUser(
-    @Parent() userEntity: UserEntity,
-  ): Promise<CountryEntity[]> {
-    return this.userService.getAllCountriesUser(userEntity.id);
+  @ResolveField('FavoriteCountry', (returns) => [CountryEntity])
+  async getFavoriteCountries(@Parent() userEntity: UserEntity) {
+    return this.countryService.findAll(userEntity.id);
   }
+
+  @Mutation((returns) => CountryEntity)
+  async upvoteCountry(
+    @Args('upvoteCountryData') upvoteCountryData: CreateCountryInput,
+  ): Promise<CountryEntity> {
+    return await this.countryService.createCountry(upvoteCountryData);
+  }
+
+  // @ResolveField((returns) => UserEntity)
+  // @Query((userEntity) => UserEntity)
+  // async getFavoriteCountries(
+  //   @Parent() countryEntity: CountryEntity,
+  // ): Promise<CountryEntity[]> {
+  //   return this.userService.getFavoriteCountries(countryEntity.userId);
+  // }
+
+  // @ResolveField((returns) => CountryEntity)
+  // async getAllCountriesUser(
+  //   @Parent() userEntity: UserEntity,
+  // ): Promise<CountryEntity[]> {
+  //   return this.userService.getAllCountriesUser(userEntity.id);
+  // }
 }

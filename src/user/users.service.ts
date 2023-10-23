@@ -35,9 +35,14 @@ export class UserService {
     );
     return await this.getOneUser(updateUserInput.id);
   }
-  async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {
-    return await this.countryService.getAllCountriesUser(userId);
-  }
+  // 111111111111
+  // async getFavoriteCountries(id: number): Promise<CountryEntity[]> {
+  //   return await this.countryService.getFavoriteCountries(id);
+  // }
+
+  // async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {
+  //   return await this.countryService.getAllCountriesUser(userId);
+  // }
 
   // async findAll() {
   //   return await this.repository.find();

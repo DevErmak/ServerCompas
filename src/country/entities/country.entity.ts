@@ -21,12 +21,11 @@ export class CountryEntity {
   @Field(() => ID)
   userId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.countries, {
-    eager: true,
-  })
-  @JoinColumn({ name: 'user_id' })
-  @Field(() => UserEntity)
-  user: UserEntity;
+  // @ManyToOne(() => UserEntity, (user) => user.countries, {
+  //   eager: true,
+  // })
+  // @Field(() => UserEntity)
+  // user: UserEntity;
 
   @Field()
   @Column()

@@ -5,6 +5,7 @@ import { CountryEntity } from './entities/country.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/users.service';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class CountryService {
@@ -30,13 +31,26 @@ export class CountryService {
     return await this.countryRepository.find();
   }
 
-  async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {
-    return await this.countryRepository.find({
-      where: {
-        userId: userId,
-      },
-    });
+  async findAll(userId: number): Promise<CountryEntity[]> {
+    return await this.countryRepository.find({ where: { userId: userId } });
   }
+
+  // async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {
+  //   return await this.countryRepository.find({
+  //     where: {
+  //       user: userId,
+  //     },
+  //   });
+  // }
+
+  // 111111111
+  // async getFavoriteCountries(userId: number): Promise<CountryEntity[]> {
+  //   return await this.countryRepository.find({
+  //     where: {
+  //       userId: userId,
+  //     },
+  //   });
+  // }
 
   async updateCountry(
     updateCountryInput: UpdateCountryInput,
