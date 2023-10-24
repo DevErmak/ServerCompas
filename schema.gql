@@ -47,7 +47,6 @@ scalar DateTime
 
 type Mutation {
   CreateFavoriteCountry(CreateFavoriteCountry: CreateCountryInput!): CountryEntity!
-  DeleteFavoriteCountry(DeleteFavoriteCountry: CreateCountryInput!): CountryEntity!
   login(login: String!, password: String!): AccessToken
   registerUser(createUser: CreateUserInput!): AccessToken
   removeUser(id: Float!): Float!
@@ -67,7 +66,7 @@ input UpdateUserInput {
 }
 
 type UserEntity {
-  FavoriteCountry: [CountryEntity!]!
+  FavoriteCountry(coatOfArms: String, currencies: String, flags: String, flagsAlt: String, languages: String, nameCapital: String, nameCountry: String, population: String, region: String, userId: ID): [CountryEntity!]!
   createdAt: DateTime!
   id: ID!
   login: String!

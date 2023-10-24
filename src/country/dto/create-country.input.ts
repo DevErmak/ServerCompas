@@ -1,4 +1,4 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
+import { InputType, Field, ID, ArgsType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateCountryInput {
@@ -22,5 +22,30 @@ export class CreateCountryInput {
   @Field()
   flagsAlt: string;
   @Field()
+  coatOfArms: string;
+}
+
+@ArgsType()
+export class GetCountryAgrs {
+  @Field(() => ID, { nullable: true })
+  userId: number;
+
+  @Field({ nullable: true })
+  nameCountry: string;
+  @Field({ nullable: true })
+  nameCapital: string;
+  @Field({ nullable: true })
+  currencies: string;
+  @Field({ nullable: true })
+  region: string;
+  @Field({ nullable: true })
+  languages: string;
+  @Field({ nullable: true })
+  population: string;
+  @Field({ nullable: true })
+  flags: string;
+  @Field({ nullable: true })
+  flagsAlt: string;
+  @Field({ nullable: true })
   coatOfArms: string;
 }

@@ -19,9 +19,12 @@ export class CountryService {
   ): Promise<CountryEntity> {
     return await this.countryRepository.save({ ...countryInput });
   }
-  async removeCountry(id: number): Promise<number> {
-    await this.countryRepository.delete({ id });
-    return id;
+  async removeCountry(userId: number, nameCountry: string): Promise<number> {
+    await this.countryRepository.delete({
+      userId: userId,
+      nameCountry: nameCountry,
+    });
+    return userId;
   }
 
   async getOneCountry(id: number): Promise<CountryEntity> {
@@ -32,7 +35,11 @@ export class CountryService {
   }
 
   async findAll(userId: number): Promise<CountryEntity[]> {
-    return await this.countryRepository.find({ where: { userId: userId } });
+    const countries = await this.countryRepository.find({
+      where: { userId: userId },
+    });
+    console.log('---------------->countries', countries);
+    return countries?.length > 0 ? countries : [];
   }
 
   // async getAllCountriesUser(userId: number): Promise<CountryEntity[]> {

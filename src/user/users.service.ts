@@ -32,7 +32,11 @@ export class UserService {
     };
   }
   async findById(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({ where: { id } });
+    console.log('---------------->qwe');
+    return await this.userRepository.findOne({
+      where: { id },
+      loadEagerRelations: true,
+    });
   }
   async getAllUser(): Promise<UserEntity[]> {
     return await this.userRepository.find();

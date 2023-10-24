@@ -13,7 +13,10 @@ import { CreateUserInput, GetUserAgrs } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CountryEntity } from 'src/country/entities/country.entity';
 import { CountryService } from 'src/country/country.service';
-import { CreateCountryInput } from 'src/country/dto/create-country.input';
+import {
+  CreateCountryInput,
+  GetCountryAgrs,
+} from 'src/country/dto/create-country.input';
 import { CurrentUser } from 'src/auth/currentuser.decorator';
 import { AccessToken } from 'src/auth/dto/auth.dto';
 import { UseGuards } from '@nestjs/common';
@@ -58,6 +61,7 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   @Query((returns) => UserEntity)
   async getMe(@CurrentUser() UserEntity: UserEntity): Promise<UserEntity> {
+    console.log('---------------->asd');
     return await this.userService.findById(UserEntity.id);
   }
 
@@ -68,7 +72,9 @@ export class UserResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @ResolveField('FavoriteCountry', (returns) => [CountryEntity])
+  @ResolveField('FavoriteCountry', (returns) => [CountryEntity], {
+    nullable: true,
+  })
   async getFavoriteCountries(@Parent() userEntity: UserEntity) {
     return this.countryService.findAll(userEntity.id);
   }
@@ -82,11 +88,15 @@ export class UserResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation((returns) => CountryEntity)
+  @ResolveField('FavoriteCountry', (returns) => [CountryEntity])
   async DeleteFavoriteCountry(
-    @Args('DeleteFavoriteCountry') createCountryInput: CreateCountryInput,
-  ): Promise<CountryEntity> {
-    return await this.countryService.createCountry(createCountryInput);
+    @Parent() userEntity: UserEntity,
+    @Args() getCountryAgrs: GetCountryAgrs,
+  ): Promise<number> {
+    return await this.countryService.removeCountry(
+      userEntity.id,
+      getCountryAgrs.nameCountry,
+    );
   }
 
   // @ResolveField((returns) => UserEntity)
