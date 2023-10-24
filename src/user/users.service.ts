@@ -4,21 +4,34 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { CountryService } from 'src/country/country.service';
-import { CountryEntity } from 'src/country/entities/country.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private countryService: CountryService,
+    private jwtService: JwtService,
   ) {}
 
-  async createUser(userInput: CreateUserInput): Promise<UserEntity> {
-    return await this.userRepository.save({ ...userInput });
+  async registerUser(userInput: CreateUserInput): Promise<{
+    token: string;
+  }> {
+    const user = await this.findByUsername(userInput.login);
+
+    if (user) throw new Error('User has been registered');
+
+    await this.userRepository.save({ ...userInput });
+    const registerUser = await this.findByUsername(userInput.login);
+
+    return {
+      token: this.jwtService.sign({
+        userId: registerUser.id,
+        username: registerUser.login,
+      }),
+    };
   }
-  async getOneUser(id: number): Promise<UserEntity> {
+  async findById(id: number): Promise<UserEntity> {
     return await this.userRepository.findOne({ where: { id } });
   }
   async getAllUser(): Promise<UserEntity[]> {
@@ -33,7 +46,11 @@ export class UserService {
       { id: updateUserInput.id },
       { ...updateUserInput },
     );
-    return await this.getOneUser(updateUserInput.id);
+    return await this.findById(updateUserInput.id);
+  }
+
+  async findByUsername(username: string): Promise<UserEntity> {
+    return this.userRepository.findOne({ where: { login: username } });
   }
   // 111111111111
   // async getFavoriteCountries(id: number): Promise<CountryEntity[]> {

@@ -9,11 +9,15 @@ import {
 } from '@nestjs/graphql';
 import { UserService } from './users.service';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
+import { CreateUserInput, GetUserAgrs } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CountryEntity } from 'src/country/entities/country.entity';
 import { CountryService } from 'src/country/country.service';
 import { CreateCountryInput } from 'src/country/dto/create-country.input';
+import { CurrentUser } from 'src/auth/currentuser.decorator';
+import { AccessToken } from 'src/auth/dto/auth.dto';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/auth.guard';
 
 @Resolver(() => UserEntity)
 export class UserResolver {
@@ -22,14 +26,15 @@ export class UserResolver {
     private countryService: CountryService,
   ) {}
 
-  // constructor(private readonly usersService: UsersService) {}
-  @Mutation(() => UserEntity)
-  async createUser(
+  @Mutation((returns) => AccessToken, { nullable: true })
+  async registerUser(
     @Args('createUser') createUserInput: CreateUserInput,
-  ): Promise<UserEntity> {
-    return await this.userService.createUser(createUserInput);
+  ): Promise<{
+    token: string;
+  }> {
+    return await this.userService.registerUser(createUserInput);
   }
-
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UserEntity)
   async updateUser(
     @Args('updateUser') updateUserInput: UpdateUserInput,
@@ -37,31 +42,51 @@ export class UserResolver {
     return await this.userService.updateUser(updateUserInput);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Number)
   async removeUser(@Args('id') id: number): Promise<number> {
     return await this.userService.removeUser(id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => UserEntity)
-  async getOneUser(@Args('id') id: number): Promise<UserEntity> {
-    return this.userService.getOneUser(id);
+  async getUser(@Args() args: GetUserAgrs): Promise<UserEntity> {
+    if (args.id) return this.userService.findById(args.id);
+    if (args.login) return this.userService.findByUsername(args.login);
   }
 
+  @UseGuards(GqlAuthGuard)
+  @Query((returns) => UserEntity)
+  async getMe(@CurrentUser() UserEntity: UserEntity): Promise<UserEntity> {
+    return await this.userService.findById(UserEntity.id);
+  }
+
+  //удалить
   @Query(() => [UserEntity])
   async getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUser();
   }
 
+  @UseGuards(GqlAuthGuard)
   @ResolveField('FavoriteCountry', (returns) => [CountryEntity])
   async getFavoriteCountries(@Parent() userEntity: UserEntity) {
     return this.countryService.findAll(userEntity.id);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation((returns) => CountryEntity)
-  async upvoteCountry(
-    @Args('upvoteCountryData') upvoteCountryData: CreateCountryInput,
+  async CreateFavoriteCountry(
+    @Args('CreateFavoriteCountry') createCountryInput: CreateCountryInput,
   ): Promise<CountryEntity> {
-    return await this.countryService.createCountry(upvoteCountryData);
+    return await this.countryService.createCountry(createCountryInput);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation((returns) => CountryEntity)
+  async DeleteFavoriteCountry(
+    @Args('DeleteFavoriteCountry') createCountryInput: CreateCountryInput,
+  ): Promise<CountryEntity> {
+    return await this.countryService.createCountry(createCountryInput);
   }
 
   // @ResolveField((returns) => UserEntity)

@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccessToken {
+  token: String!
+}
+
 type CountryEntity {
   coatOfArms: String!
   createdAt: DateTime!
@@ -42,15 +46,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
-  createUser(createUser: CreateUserInput!): UserEntity!
+  CreateFavoriteCountry(CreateFavoriteCountry: CreateCountryInput!): CountryEntity!
+  DeleteFavoriteCountry(DeleteFavoriteCountry: CreateCountryInput!): CountryEntity!
+  login(login: String!, password: String!): AccessToken
+  registerUser(createUser: CreateUserInput!): AccessToken
   removeUser(id: Float!): Float!
   updateUser(updateUser: UpdateUserInput!): UserEntity!
-  upvoteCountry(upvoteCountryData: CreateCountryInput!): CountryEntity!
 }
 
 type Query {
   getAllUsers: [UserEntity!]!
-  getOneUser(id: Float!): UserEntity!
+  getMe: UserEntity!
+  getUser(id: Float, login: String): UserEntity!
 }
 
 input UpdateUserInput {

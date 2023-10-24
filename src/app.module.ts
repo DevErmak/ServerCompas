@@ -9,6 +9,7 @@ import { UsersModule } from './user/users.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { CountryModule } from './country/country.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { CountryModule } from './country/country.module';
     }),
     UsersModule,
     CountryModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
