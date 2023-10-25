@@ -41,6 +41,10 @@ import { AuthModule } from './auth/auth.module';
         sortSchema: true,
         playground: false,
         plugins: [ApolloServerPluginLandingPageLocalDefault()],
+        cors: {
+          credentials: true,
+          origin: true,
+        },
       }),
     }),
     UsersModule,

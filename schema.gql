@@ -32,7 +32,6 @@ input CreateCountryInput {
   nameCountry: String!
   population: String!
   region: String!
-  userId: ID!
 }
 
 input CreateUserInput {
@@ -47,26 +46,17 @@ scalar DateTime
 
 type Mutation {
   CreateFavoriteCountry(CreateFavoriteCountry: CreateCountryInput!): CountryEntity!
+  DeleteFavoriteCountry(nameCountry: String!): Float!
   login(login: String!, password: String!): AccessToken
   registerUser(createUser: CreateUserInput!): AccessToken
-  removeUser(id: Float!): Float!
-  updateUser(updateUser: UpdateUserInput!): UserEntity!
 }
 
 type Query {
-  getAllUsers: [UserEntity!]!
   getMe: UserEntity!
-  getUser(id: Float, login: String): UserEntity!
-}
-
-input UpdateUserInput {
-  id: ID!
-  login: String
-  password: String
 }
 
 type UserEntity {
-  FavoriteCountry(coatOfArms: String, currencies: String, flags: String, flagsAlt: String, languages: String, nameCapital: String, nameCountry: String, population: String, region: String, userId: ID): [CountryEntity!]!
+  FavoriteCountry: [CountryEntity!]
   createdAt: DateTime!
   id: ID!
   login: String!

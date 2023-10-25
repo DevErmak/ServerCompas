@@ -15,7 +15,7 @@ import { CountryEntity } from 'src/country/entities/country.entity';
 import { CountryService } from 'src/country/country.service';
 import {
   CreateCountryInput,
-  GetCountryAgrs,
+  // GetCountryAgrs,
 } from 'src/country/dto/create-country.input';
 import { CurrentUser } from 'src/auth/currentuser.decorator';
 import { AccessToken } from 'src/auth/dto/auth.dto';
@@ -37,39 +37,40 @@ export class UserResolver {
   }> {
     return await this.userService.registerUser(createUserInput);
   }
-  @UseGuards(GqlAuthGuard)
-  @Mutation(() => UserEntity)
-  async updateUser(
-    @Args('updateUser') updateUserInput: UpdateUserInput,
-  ): Promise<UserEntity> {
-    return await this.userService.updateUser(updateUserInput);
-  }
 
-  @UseGuards(GqlAuthGuard)
-  @Mutation(() => Number)
-  async removeUser(@Args('id') id: number): Promise<number> {
-    return await this.userService.removeUser(id);
-  }
+  // @UseGuards(GqlAuthGuard)
+  // @Mutation(() => UserEntity)
+  // async updateUser(
+  //   @Args('updateUser') updateUserInput: UpdateUserInput,
+  // ): Promise<UserEntity> {
+  //   return await this.userService.updateUser(updateUserInput);
+  // }
 
-  @UseGuards(GqlAuthGuard)
-  @Query(() => UserEntity)
-  async getUser(@Args() args: GetUserAgrs): Promise<UserEntity> {
-    if (args.id) return this.userService.findById(args.id);
-    if (args.login) return this.userService.findByUsername(args.login);
-  }
+  // @UseGuards(GqlAuthGuard)
+  // @Mutation(() => Number)
+  // async removeUser(@Args('id') id: number): Promise<number> {
+  //   return await this.userService.removeUser(id);
+  // }
+
+  // @UseGuards(GqlAuthGuard)
+  // @Query(() => UserEntity)
+  // async getUser(@Args() args: GetUserAgrs): Promise<UserEntity> {
+  //   if (args.id) return this.userService.findById(args.id);
+  //   if (args.login) return this.userService.findByUsername(args.login);
+  // }
 
   @UseGuards(GqlAuthGuard)
   @Query((returns) => UserEntity)
-  async getMe(@CurrentUser() UserEntity: UserEntity): Promise<UserEntity> {
+  async getMe(@CurrentUser() userEntity: UserEntity): Promise<UserEntity> {
     console.log('---------------->asd');
-    return await this.userService.findById(UserEntity.id);
+    return await this.userService.findById(userEntity.id);
   }
 
   //удалить
-  @Query(() => [UserEntity])
-  async getAllUsers(): Promise<UserEntity[]> {
-    return this.userService.getAllUser();
-  }
+  // @Query(() => [UserEntity])
+  // async getAllUsers(): Promise<UserEntity[]> {
+  //   return this.userService.getAllUser();
+  // }
 
   @UseGuards(GqlAuthGuard)
   @ResolveField('FavoriteCountry', (returns) => [CountryEntity], {
@@ -82,21 +83,32 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation((returns) => CountryEntity)
   async CreateFavoriteCountry(
+    @CurrentUser() userEntity: UserEntity,
     @Args('CreateFavoriteCountry') createCountryInput: CreateCountryInput,
   ): Promise<CountryEntity> {
-    return await this.countryService.createCountry(createCountryInput);
+    return await this.countryService.createCountry(
+      userEntity.id,
+      createCountryInput,
+    );
   }
 
+  // @UseGuards(GqlAuthGuard)
+  // @ResolveField((returns) => Number)
+  // async DeleteFavoriteCountry(
+  //   @Parent() userEntity: UserEntity,
+  //   @Args('nameCountry') nameCountry: string,
+  // ): Promise<number> {
+  //   return await this.countryService.removeCountry(userEntity.id, nameCountry);
+  // }
+
   @UseGuards(GqlAuthGuard)
-  @ResolveField('FavoriteCountry', (returns) => [CountryEntity])
+  @Mutation((returns) => Number)
   async DeleteFavoriteCountry(
-    @Parent() userEntity: UserEntity,
-    @Args() getCountryAgrs: GetCountryAgrs,
+    @CurrentUser() userEntity: UserEntity,
+    @Args('nameCountry') nameCountry: string,
   ): Promise<number> {
-    return await this.countryService.removeCountry(
-      userEntity.id,
-      getCountryAgrs.nameCountry,
-    );
+    console.log('---------------->asd');
+    return await this.countryService.removeCountry(userEntity.id, nameCountry);
   }
 
   // @ResolveField((returns) => UserEntity)

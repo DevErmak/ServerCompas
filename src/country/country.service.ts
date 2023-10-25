@@ -15,10 +15,15 @@ export class CountryService {
   ) {}
 
   async createCountry(
+    userID: number,
     countryInput: CreateCountryInput,
   ): Promise<CountryEntity> {
-    return await this.countryRepository.save({ ...countryInput });
+    return await this.countryRepository.save({
+      userId: userID,
+      ...countryInput,
+    });
   }
+
   async removeCountry(userId: number, nameCountry: string): Promise<number> {
     await this.countryRepository.delete({
       userId: userId,
