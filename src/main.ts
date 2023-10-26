@@ -6,18 +6,23 @@ import {
 } from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCors from '@fastify/cors';
+import fastifyCookie from '@fastify/cookie';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
-  app.enableCors({
+  await app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+  await app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
+  await app.register(fastifyCookie, {
+    secret: 'secret',
+  });
+
   // app.register(fastifyCors, {
   //   origin: /\*/,
   //   allowedHeaders: [

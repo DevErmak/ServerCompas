@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { FastifyReply } from 'fastify';
 
 @Injectable()
 export class UserService {
@@ -14,22 +15,24 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-  async registerUser(userInput: CreateUserInput): Promise<{
-    token: string;
-  }> {
+  async registerUser(userInput: CreateUserInput): Promise<string> {
     const user = await this.findByUsername(userInput.login);
 
     if (user) throw new Error('User has been registered');
 
     await this.userRepository.save({ ...userInput });
     const registerUser = await this.findByUsername(userInput.login);
-
-    return {
-      token: this.jwtService.sign({
-        userId: registerUser.id,
-        username: registerUser.login,
-      }),
-    };
+    const token = this.jwtService.sign({
+      userId: registerUser.id,
+      username: registerUser.login,
+    });
+    return token;
+    // return {
+    //   token: this.jwtService.sign({
+    //     userId: registerUser.id,
+    //     username: registerUser.login,
+    //   }),
+    // };
   }
   async findById(id: number): Promise<UserEntity> {
     console.log('---------------->qwe');
