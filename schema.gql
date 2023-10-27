@@ -47,12 +47,12 @@ scalar DateTime
 type Mutation {
   CreateFavoriteCountry(CreateFavoriteCountry: CreateCountryInput!): CountryEntity!
   DeleteFavoriteCountry(nameCountry: String!): Float!
-  login(login: String!, password: String!): AccessToken
   registerUser(createUser: CreateUserInput!): AccessToken
 }
 
 type Query {
   getMe: UserEntity!
+  login(login: String!, password: String!): AccessToken
 }
 
 type UserEntity {

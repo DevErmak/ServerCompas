@@ -19,9 +19,10 @@ import {
 } from 'src/country/dto/create-country.input';
 import { CurrentUser } from 'src/auth/currentuser.decorator';
 import { AccessToken } from 'src/auth/dto/auth.dto';
-import { Res, UseGuards } from '@nestjs/common';
+import { Header, Res, UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/auth.guard';
 import { FastifyReply } from 'fastify';
+import { access } from 'fs/promises';
 
 @Resolver(() => UserEntity)
 export class UserResolver {
@@ -33,14 +34,14 @@ export class UserResolver {
   @Mutation((returns) => AccessToken, { nullable: true })
   async registerUser(
     @Args('createUser') createUserInput: CreateUserInput,
-    @Res({ passthrough: true }) response: FastifyReply,
-  ): Promise<string> {
-    const token = await this.userService.registerUser(createUserInput);
+    // @Res({ passthrough: true }) response: FastifyReply,
+  ): Promise<{ token: string }> {
+    return await this.userService.registerUser(createUserInput);
 
-    await response.header('Authorization', 'Bearer ' + token);
+    // await response.setCookie('token_auth', token, { httpOnly: true });
+    // response.signCookie('Bearer ' + token);
     // await response.cookie('token_auth', token, { httpOnly: true });
-
-    return 'Success';
+    // await response.header('Authorization', 'Bearer ' + token);
   }
 
   // @UseGuards(GqlAuthGuard)
