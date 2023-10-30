@@ -9,7 +9,11 @@ import {
 } from '@nestjs/graphql';
 import { UserService } from './users.service';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserInput, GetUserAgrs } from './dto/create-user.input';
+import {
+  CreateUserInput,
+  GetUserAgrs,
+  // userResponseGetMe,
+} from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CountryEntity } from 'src/country/entities/country.entity';
 import { CountryService } from 'src/country/country.service';
@@ -108,11 +112,11 @@ export class UserResolver {
   // }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation((returns) => Number)
+  @Mutation((returns) => String)
   async DeleteFavoriteCountry(
     @CurrentUser() userEntity: UserEntity,
     @Args('nameCountry') nameCountry: string,
-  ): Promise<number> {
+  ): Promise<string> {
     console.log('---------------->asd');
     return await this.countryService.removeCountry(userEntity.id, nameCountry);
   }

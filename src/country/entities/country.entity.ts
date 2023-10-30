@@ -48,7 +48,7 @@ export class CountryEntity {
   @Field()
   @Column()
   flags: string;
-  @Field()
+  @Field({ nullable: true })
   @Column()
   flagsAlt: string;
   @Field()

@@ -19,7 +19,7 @@ export class CreateCountryInput {
   population: string;
   @Field()
   flags: string;
-  @Field()
+  @Field({ nullable: true })
   flagsAlt: string;
   @Field()
   coatOfArms: string;

@@ -24,12 +24,12 @@ export class CountryService {
     });
   }
 
-  async removeCountry(userId: number, nameCountry: string): Promise<number> {
+  async removeCountry(userId: number, nameCountry: string): Promise<string> {
     await this.countryRepository.delete({
       userId: userId,
       nameCountry: nameCountry,
     });
-    return userId;
+    return nameCountry;
   }
 
   async getOneCountry(id: number): Promise<CountryEntity> {

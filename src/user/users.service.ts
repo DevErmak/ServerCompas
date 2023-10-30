@@ -31,7 +31,6 @@ export class UserService {
     };
   }
   async findById(id: number): Promise<UserEntity> {
-    console.log('---------------->qwe');
     return await this.userRepository.findOne({
       where: { id },
       loadEagerRelations: true,
@@ -44,13 +43,13 @@ export class UserService {
     await this.userRepository.delete({ id });
     return id;
   }
-  async updateUser(updateUserInput: UpdateUserInput): Promise<UserEntity> {
-    await this.userRepository.update(
-      { id: updateUserInput.id },
-      { ...updateUserInput },
-    );
-    return await this.findById(updateUserInput.id);
-  }
+  // async updateUser(updateUserInput: UpdateUserInput): Promise<UserEntity> {
+  //   await this.userRepository.update(
+  //     { id: updateUserInput.id },
+  //     { ...updateUserInput },
+  //   );
+  //   return await this.findById(updateUserInput.id);
+  // }
 
   async findByUsername(username: string): Promise<UserEntity> {
     return this.userRepository.findOne({ where: { login: username } });

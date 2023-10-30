@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, HideField } from '@nestjs/graphql';
 import { IsEmail, Matches, Min, MinLength } from 'class-validator';
 import { CountryEntity } from 'src/country/entities/country.entity';
 import {
@@ -35,7 +35,8 @@ export class UserEntity {
   //   message:
   //     'the password must contain at least 6 characters and have at least one capital letter and number',
   // })
-  @Field()
+  // @Field()
+  @HideField()
   @Column()
   password: string;
 

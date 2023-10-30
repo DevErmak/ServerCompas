@@ -1,7 +1,6 @@
 // import { InputType, Int, Field } from '@nestjs/graphql';
-import { InputType, Field, ArgsType } from '@nestjs/graphql';
+import { InputType, Field, ArgsType, ObjectType } from '@nestjs/graphql';
 import { IsEmail, Matches, MinLength } from 'class-validator';
-import { CountryEntity } from 'src/country/entities/country.entity';
 
 @InputType()
 export class CreateUserInput {
@@ -29,3 +28,11 @@ export class GetUserAgrs {
   @Field({ nullable: true })
   login?: string;
 }
+
+// @ObjectType()
+// export class userResponseGetMe {
+//   @Field()
+//   id: number;
+//   @Field()
+//   login: string;
+// }
